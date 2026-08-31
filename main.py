@@ -2,13 +2,16 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
+import os
 
 app = FastAPI(title="SurakshaNLP API")
 
-print("Loading model from HuggingFace...")
+print("Loading model...")
 MODEL_ID = "bipinpal/suraksha-nlp-muril"
-tokenizer = AutoTokenizer.from_pretrained(MODEL_ID)
-model = AutoModelForSequenceClassification.from_pretrained(MODEL_ID)
+HF_TOKEN = os.environ.get("HF_TOKEN", None)
+
+tokenizer = AutoTokenizer.from_pretrained(MODEL_ID, token=HF_TOKEN)
+model = AutoModelForSequenceClassification.from_pretrained(MODEL_ID, token=HF_TOKEN)
 model.eval()
 print("✅ Model loaded!")
 
@@ -41,7 +44,11 @@ def predict(req: ScanRequest):
 
 @app.get("/health")
 def health():
-    return {"status": "running", "model": "bipinpal/suraksha-nlp-muril"}
+    return {"status": "running", "model": MODEL_ID}
+
+@app.get("/")
+def root():
+    return {"message": "SurakshaNLP API is live!"}
 
 @app.get("/")
 def root():
