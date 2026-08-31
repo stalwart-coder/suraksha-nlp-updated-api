@@ -7,7 +7,7 @@ import os
 app = FastAPI(title="SurakshaNLP API")
 
 print("Loading model...")
-MODEL_ID = "Bipin-Pal/suraksha-nlp-muril"
+MODEL_ID = "Bipin-Pal/suraksha-nlp-distilbert"
 HF_TOKEN = os.environ.get("HF_TOKEN", None)
 
 tokenizer = AutoTokenizer.from_pretrained(MODEL_ID, token=HF_TOKEN)
